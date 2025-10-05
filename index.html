@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio | あなたの名前</title>
+  <meta name="description" content="ポートフォリオサイト" />
+  <style>
+    :root{
+      --bg:#0b0b0c;--fg:#f5f5f7;--muted:#b6b6c1;--brand:#6bd1ff;--overlay:rgba(255,255,255,.82);
+      --card:#151518;--line:#24242a;--accent:#00a3ff;
+      --maxw:680px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Noto Sans JP,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    a{color:var(--brand);text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* レイアウト */
+    .page{min-height:100dvh;display:grid;grid-template-columns:1fr;}
+
+    /* PC時の左縦ナビ */
+    @media (min-width: 1000px){
+      .page{grid-template-columns:280px 1fr}
+      .sidenav{position:sticky;top:0;height:100dvh;border-right:1px solid var(--line)}
+    }
+
+    /* スマホ: 右寄せメイン */
+    .main{width:100%;margin-left:auto;}
+    @media (max-width: 999px){
+      .main{max-width:var(--maxw);margin-left:auto;margin-right:0;padding-left:16px;padding-right:16px}
+    }
+
+    /* サイドナビ */
+    .sidenav{display:flex;flex-direction:column;gap:16px;padding:20px}
+    .logo{font-weight:800;font-size:20px;letter-spacing:.2px}
+    .nav{display:flex;gap:8px}
+    .nav a{display:inline-flex;padding:10px 12px;border-radius:10px;background:#121216;border:1px solid var(--line);color:var(--fg)}
+    .nav a.active{outline:2px solid var(--accent)}
+
+    /* トップバー（スマホ時） */
+    .topbar{position:sticky;top:0;z-index:30;backdrop-filter:saturate(1.6) blur(8px);background:rgba(11,11,12,.7);border-bottom:1px solid var(--line)}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;max-width:var(--maxw);margin:0 0 0 auto}
+    .topbar .nav a{background:transparent;border:none;padding:8px 6px}
+
+    @media (min-width:1000px){.topbar{display:none}}
+
+    /* セクション */
+    section{padding:36px 16px}
+    @media (min-width:1000px){section{padding:48px 40px}}
+
+    .hero{position:relative;border-bottom:1px solid var(--line)}
+    .hero img{width:100%;height:42dvh;object-fit:cover;border-radius:16px}
+
+    h1,h2,h3{margin:0 0 .6em}
+    h1{font-size:28px}
+    h2{font-size:22px}
+    .muted{color:var(--muted)}
+
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+
+    /* プロフィール */
+    .bio{display:grid;gap:16px}
+    .grid-2{display:grid;gap:16px}
+    @media (min-width:700px){.grid-2{grid-template-columns:1.2fr .8fr}}
+
+    .list{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+    .list li{background:#111114;border:1px solid var(--line);padding:10px 12px;border-radius:12px}
+
+    /* Works */
+    .works{display:grid;gap:16px}
+    .work-card{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+    .work-bg{position:absolute;inset:0;filter:brightness(.75)}
+    .work-bg img{width:100%;height:100%;object-fit:cover}
+    .work-overlay{position:absolute;inset:auto 0 0 0;background:var(--overlay);color:#111;padding:16px;display:flex;flex-wrap:wrap;gap:12px}
+    .work-title{font-weight:700}
+    .work-meta{font-size:14px;color:#333}
+    .work-actions{margin-left:auto}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #dcdce0;background:#fff;color:#111}
+    .btn.ghost{background:transparent;color:#fff;border-color:var(--line)}
+
+    .more-wrap{display:flex;justify-content:center;padding-top:4px}
+
+    /* Contents */
+    .contents-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .content-card{position:relative;aspect-ratio:1/1;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+    .content-card img{width:100%;height:100%;object-fit:cover}
+    .content-title{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.0);color:#fff;font-weight:700;opacity:0;transition:opacity .2s, background .2s;text-align:center;padding:12px}
+    .content-card:hover .content-title{opacity:1;background:rgba(0,0,0,.45)}
+
+    /* 詳細ページ */
+    .detail{display:grid;gap:16px}
+    .asset-grid{display:grid;gap:12px}
+    @media (min-width:700px){.asset-grid{grid-template-columns:repeat(3,1fr)}}
+    .asset{background:#111114;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    .asset a{display:block}
+    .asset .cap{padding:8px 10px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+
+    /* フッター */
+    footer{padding:40px 16px;color:var(--muted);border-top:1px solid var(--line)}
+    footer .inner{max-width:var(--maxw);margin-left:auto;margin-right:0}
+  </style>
+</head>
+<body>
+  <!-- スマホ用トップバー -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">YOUR LOGO</div>
+      <nav class="nav" aria-label="top">
+        <a href="#home" data-link>Profile</a>
+        <a href="#works" data-link>Works</a>
+        <a href="#contents" data-link>Contents</a>
+        <a href="#contact" data-link>問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page">
+    <!-- 左縦ナビ（PCのみ表示） -->
+    <aside class="sidenav" aria-label="side">
+      <div class="logo">YOUR LOGO</div>
+      <nav class="nav" id="sideNav">
+        <a href="#home" data-link>Profile</a>
+        <a href="#works" data-link>Works</a>
+        <a href="#contents" data-link>Contents</a>
+        <a href="#contact" data-link>問い合わせ</a>
+      </nav>
+    </aside>
+
+    <!-- メイン -->
+    <main class="main" id="app" role="main" aria-live="polite"></main>
+  </div>
+
+  <footer>
+    <div class="inner">© <span id="y"></span> Your Name</div>
+  </footer>
+
+  <script>
+  const state = {
+    works: [
+      {slug:'litlink', title:'lit.link UI刷新', company:'lit.link', from:'2023-04-01', to:'2023-12-31', cover:'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1600&auto=format&fit=crop',
+       detail:'SNSリンク集サービスのUI/UXリニューアル。情報設計〜デザインシステム整理まで担当。',
+       assets:[{type:'img', url:'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop', label:'コンポーネント一覧'},
+               {type:'img', url:'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1600&auto=format&fit=crop', label:'画面例'},
+               {type:'pdf', url:'#', label:'要件定義.pdf'}]
+      },
+      {slug:'brewtope', title:'Brewtope EC基盤', company:'Brewtope', from:'2024-02-01', to:'2024-09-01', cover:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1600&auto=format&fit=crop',
+       detail:'クラフトビールECの体験設計とLP群制作。A/BテストでCVR+18%。',
+       assets:[{type:'img', url:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1600&auto=format&fit=crop', label:'LPヒーロー'},
+               {type:'img', url:'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1600&auto=format&fit=crop', label:'UI断片'}]
+      },
+      {slug:'staygift', title:'StayGift 店舗ページ運用', company:'StayGift', from:'2024-03-01', to:'2025-08-31', cover:'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1600&auto=format&fit=crop',
+       detail:'店舗ページ量産のためのテンプレ設計と運用。審査フロー短縮。', assets:[]},
+      {slug:'shiftai', title:'SHIFT AI LP群', company:'SHIFT AI', from:'2025-04-01', to:'2025-06-30', cover:'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1600&auto=format&fit=crop', detail:'教育事業のLPライブラリ構築。', assets:[]},
+      {slug:'otomoni', title:'Otomoni 卸LP', company:'Otomoni', from:'2025-01-05', to:'2025-03-30', cover:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1600&auto=format&fit=crop', detail:'卸向けの訴求再設計。', assets:[]},
+      {slug:'honda', title:'Honda 認定中古車CP', company:'Honda', from:'2024-05-01', to:'2024-08-31', cover:'https://images.unsplash.com/photo-1493238792000-8113da705763?q=80&w=1600&auto=format&fit=crop', detail:'販促クリエイティブ制作。', assets:[]}
+    ],
+    contents:[
+      {slug:'radio', title:'天保ぷくちー ラジオ', cover:'https://images.unsplash.com/photo-1515387784663-e2e29a23f69d?q=80&w=1600&auto=format&fit=crop',
+       detail:'番組アートワークと台本、動画サムネ群。', assets:[]},
+      {slug:'art', title:'イラスト・グラフィック', cover:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop', detail:'趣味・案件のビジュアルまとめ。', assets:[]},
+      {slug:'video', title:'動画編集ショート', cover:'https://images.unsplash.com/photo-1516939884455-1445c8652f83?q=80&w=1600&auto=format&fit=crop', detail:'短編編集とサンプル。', assets:[]}
+    ]
+  }
+
+  // ユーティリティ
+  const el = sel => document.querySelector(sel)
+  const app = el('#app')
+  const fmtRange = (from,to)=>{
+    const f=new Date(from), t=new Date(to)
+    const fn=(d)=>`${d.getFullYear()}年${String(d.getMonth()+1).padStart(2,'0')}月${String(d.getDate()).padStart(2,'0')}日`
+    return `${fn(f)} 〜 ${fn(t)}`
+  }
+
+  function setActiveNav(hash){
+    document.querySelectorAll('[data-link]').forEach(a=>{
+      if(a.getAttribute('href')===hash) a.classList.add('active'); else a.classList.remove('active')
+    })
+  }
+
+  // ページ描画
+  function renderHome(){
+    setActiveNav('#home')
+    app.innerHTML = `
+      <section class="hero"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2400&auto=format&fit=crop" alt="ヘッダー画像"></section>
+      <section class="bio">
+        <div class="grid-2">
+          <div class="card">
+            <h1>プロフィール</h1>
+            <p id="bioText">UI/UX とグラフィックを横断するデザイナー。事業課題に手を突っ込み、情報設計から表現まで一気通貫でやります。クラフトビールと古い看板が好き。200文字前後を目安に自己紹介文をここへ。</p>
+          </div>
+          <div class="card">
+            <h2>連絡先</h2>
+            <p class="muted">メール: <a href="mailto:you@example.com">you@example.com</a><br>所在地: Tokyo, JP</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h2>学歴</h2>
+            <ul class="list" id="eduList">
+              <li>20XX 年 3 月｜〇〇大学 △△学部 卒業</li>
+              <li>20XX 年 3 月｜□□高等学校 卒業</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h2>経歴</h2>
+            <ul class="list" id="careerList">
+              <li>2025- 現在｜フリーランスデザイナー</li>
+              <li>2023-2025｜株式会社△△ UI/UX デザイナー</li>
+              <li>2021-2023｜制作会社□□ デザイナー</li>
+              <li>インターンや賞歴などを10項目程度で</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>最新の Works</h2>
+        <div class="works" id="worksPreview"></div>
+        <div class="more-wrap"><a class="btn" href="#works" data-link>もっと見る</a></div>
+      </section>
+
+      <section>
+        <h2>Contents</h2>
+        <div class="contents-grid" id="contentsGrid"></div>
+      </section>
+    `
+
+    // Works プレビュー 5件
+    const w5 = state.works.slice(0,5)
+    el('#worksPreview').innerHTML = w5.map(w=>WorkCard(w)).join('')
+
+    // Contents 4件まで
+    const c = state.contents.slice(0,4)
+    el('#contentsGrid').innerHTML = c.map(ct=>ContentCard(ct)).join('')
+  }
+
+  function WorkCard(w){
+    return `
+      <article class="work-card">
+        <div class="work-bg"><img src="${w.cover}" alt="${w.title}"></div>
+        <div class="work-overlay">
+          <div>
+            <div class="work-title">${w.company}｜${w.title}</div>
+            <div class="work-meta">${fmtRange(w.from,w.to)}</div>
+          </div>
+          <div class="work-actions"><a class="btn" href="#work/${w.slug}">詳細を見る</a></div>
+        </div>
+      </article>`
+  }
+
+  function ContentCard(c){
+    return `
+      <a class="content-card" href="#content/${c.slug}">
+        <img src="${c.cover}" alt="${c.title}">
+        <div class="content-title">${c.title}</div>
+      </a>`
+  }
+
+  function renderWorks(){
+    setActiveNav('#works')
+    app.innerHTML = `
+      <section>
+        <h1>Works</h1>
+        <p class="muted">過去の仕事内容</p>
+        <div class="works" id="worksAll"></div>
+      </section>`
+    el('#worksAll').innerHTML = state.works.map(WorkCard).join('')
+  }
+
+  function renderWorkDetail(slug){
+    const w = state.works.find(x=>x.slug===slug)
+    if(!w){location.hash='#works';return}
+    setActiveNav('')
+    app.innerHTML = `
+      <section class="detail">
+        <div class="hero"><img src="${w.cover}" alt="${w.title}"></div>
+        <div class="card">
+          <h1>${w.company}｜${w.title}</h1>
+          <p class="muted">${fmtRange(w.from,w.to)}</p>
+          <p>${w.detail||''}</p>
+        </div>
+        <div class="card">
+          <h2>アサインした制作物</h2>
+          <div class="asset-grid" id="assetGrid"></div>
+        </div>
+        <div class="more-wrap"><a class="btn ghost" href="#works">← Works 一覧へ</a></div>
+      </section>`
+
+    const grid = el('#assetGrid')
+    if(!w.assets || !w.assets.length){grid.innerHTML = `<p class="muted">掲載準備中です。</p>`;return}
+    grid.innerHTML = w.assets.map(a=>{
+      if(a.type==='img'){
+        return `<figure class="asset"><a href="${a.url}" target="_blank" rel="noopener"><img src="${a.url}" alt="${a.label||''}"></a><figcaption class="cap">${a.label||''}</figcaption></figure>`
+      }
+      if(a.type==='pdf'){
+        return `<div class="asset"><a href="${a.url}" target="_blank" rel="noopener" style="padding:14px;display:block">PDF: ${a.label||'資料'}</a><div class="cap">${a.label||''}</div></div>`
+      }
+      return ''
+    }).join('')
+  }
+
+  function renderContents(){
+    setActiveNav('#contents')
+    app.innerHTML = `
+      <section>
+        <h1>Contents</h1>
+        <p class="muted">個人制作や連載など</p>
+        <div class="contents-grid" id="contentsAll"></div>
+      </section>`
+    el('#contentsAll').innerHTML = state.contents.map(ContentCard).join('')
+  }
+
+  function renderContentDetail(slug){
+    const c = state.contents.find(x=>x.slug===slug)
+    if(!c){location.hash='#contents';return}
+    setActiveNav('')
+    app.innerHTML = `
+      <section class="detail">
+        <div class="hero"><img src="${c.cover}" alt="${c.title}"></div>
+        <div class="card">
+          <h1>${c.title}</h1>
+          <p>${c.detail||''}</p>
+        </div>
+        <div class="card">
+          <h2>関連アセット</h2>
+          <div class="asset-grid" id="assetGrid"></div>
+        </div>
+        <div class="more-wrap"><a class="btn ghost" href="#contents">← Contents 一覧へ</a></div>
+      </section>`
+  }
+
+  function renderContact(){
+    setActiveNav('#contact')
+    app.innerHTML = `
+      <section>
+        <h1>問い合わせ</h1>
+        <div class="card">
+          <p>お仕事のご相談はメールにてご連絡ください。</p>
+          <ul class="list">
+            <li>メール: <a href="mailto:you@example.com">you@example.com</a></li>
+            <li>SNS: <a href="#" target="_blank" rel="noopener">@yourid</a></li>
+            <li>資料: <a href="#" target="_blank" rel="noopener">職務経歴書（PDF）</a></li>
+          </ul>
+        </div>
+      </section>`
+  }
+
+  function router(){
+    const h = location.hash || '#home'
+    if(h==="#home") return renderHome()
+    if(h==="#works") return renderWorks()
+    if(h==="#contents") return renderContents()
+    if(h==="#contact") return renderContact()
+    // /work/:slug or /content/:slug
+    const m = h.match(/^#(work|content)\/([\w-]+)/)
+    if(m){
+      if(m[1]==='work') return renderWorkDetail(m[2])
+      if(m[1]==='content') return renderContentDetail(m[2])
+    }
+    renderHome()
+  }
+
+  window.addEventListener('hashchange', router)
+  document.addEventListener('DOMContentLoaded', ()=>{
+    router();
+    document.getElementById('y').textContent = new Date().getFullYear()
+  })
+  </script>
+</body>
+</html>
