@@ -7,100 +7,47 @@
   <meta name="description" content="ポートフォリオサイト" />
   <style>
     :root{
-      --bg:#0b0b0c;--fg:#f5f5f7;--muted:#b6b6c1;--brand:#6bd1ff;--overlay:rgba(255,255,255,.82);
-      --card:#151518;--line:#24242a;--accent:#00a3ff;
-      --maxw:680px;
+      /* Color system */
+      --bg:#0d0f12;         /* paper black */
+      --fg:#e9ecf1;         /* text */
+      --muted:#a8b0bc;      /* secondary text */
+      --brand:#5eead4;      /* accent (teal) */
+      --card:#12151a;       /* surfaces */
+      --line:#1f242c;       /* strokes */
+      --glass:rgba(255,255,255,.9); /* work overlay */
+
+      /* Layout */
+      --maxw:820px; /* main content max width */
+
+      /* Type scale */
+      --fs-1:clamp(14px,1.1vw,16px);
+      --fs-2:clamp(16px,1.3vw,18px);
+      --fs-3:clamp(18px,1.6vw,22px);
+      --fs-4:clamp(24px,2.4vw,36px);
+
+      /* Spacing scale (8pt) */
+      --s-1:8px; --s-2:12px; --s-3:16px; --s-4:20px; --s-5:24px; --s-6:32px; --s-7:40px; --s-8:56px;
+      --radius:16px; --radius-sm:12px;
+      --shadow:0 8px 24px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Noto Sans JP,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
-    a{color:var(--brand);text-decoration:none}
+    body{margin:0;background:var(--bg);color:var(--fg);font:var(--fs-2)/1.65 system-ui,-apple-system,Segoe UI,Roboto,Noto Sans JP,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
     img{max-width:100%;display:block}
+    a{color:var(--brand);text-decoration:none}
+    a:focus-visible,button:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:10px}
 
-    /* レイアウト */
-    .page{min-height:100dvh;display:grid;grid-template-columns:1fr;}
-
-    /* PC時の左縦ナビ */
-    @media (min-width: 1000px){
-      .page{grid-template-columns:280px 1fr}
+    /* Grid */
+    .page{min-height:100dvh;display:grid;grid-template-columns:1fr}
+    @media (min-width:1000px){
+      .page{grid-template-columns:300px 1fr}
       .sidenav{position:sticky;top:0;height:100dvh;border-right:1px solid var(--line)}
     }
 
-    /* スマホ: 右寄せメイン */
-    .main{width:100%;margin-left:auto;}
-    @media (max-width: 999px){
-      .main{max-width:var(--maxw);margin-left:auto;margin-right:0;padding-left:16px;padding-right:16px}
-    }
-
-    /* サイドナビ */
-    .sidenav{display:flex;flex-direction:column;gap:16px;padding:20px}
-    .logo{font-weight:800;font-size:20px;letter-spacing:.2px}
-    .nav{display:flex;gap:8px}
-    .nav a{display:inline-flex;padding:10px 12px;border-radius:10px;background:#121216;border:1px solid var(--line);color:var(--fg)}
-    .nav a.active{outline:2px solid var(--accent)}
-
-    /* トップバー（スマホ時） */
-    .topbar{position:sticky;top:0;z-index:30;backdrop-filter:saturate(1.6) blur(8px);background:rgba(11,11,12,.7);border-bottom:1px solid var(--line)}
-    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;max-width:var(--maxw);margin:0 0 0 auto}
-    .topbar .nav a{background:transparent;border:none;padding:8px 6px}
-
-    @media (min-width:1000px){.topbar{display:none}}
-
-    /* セクション */
-    section{padding:36px 16px}
-    @media (min-width:1000px){section{padding:48px 40px}}
-
-    .hero{position:relative;border-bottom:1px solid var(--line)}
-    .hero img{width:100%;height:42dvh;object-fit:cover;border-radius:16px}
-
-    h1,h2,h3{margin:0 0 .6em}
-    h1{font-size:28px}
-    h2{font-size:22px}
-    .muted{color:var(--muted)}
-
-    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
-
-    /* プロフィール */
-    .bio{display:grid;gap:16px}
-    .grid-2{display:grid;gap:16px}
-    @media (min-width:700px){.grid-2{grid-template-columns:1.2fr .8fr}}
-
-    .list{margin:0;padding:0;list-style:none;display:grid;gap:10px}
-    .list li{background:#111114;border:1px solid var(--line);padding:10px 12px;border-radius:12px}
-
-    /* Works */
-    .works{display:grid;gap:16px}
-    .work-card{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
-    .work-bg{position:absolute;inset:0;filter:brightness(.75)}
-    .work-bg img{width:100%;height:100%;object-fit:cover}
-    .work-overlay{position:absolute;inset:auto 0 0 0;background:var(--overlay);color:#111;padding:16px;display:flex;flex-wrap:wrap;gap:12px}
-    .work-title{font-weight:700}
-    .work-meta{font-size:14px;color:#333}
-    .work-actions{margin-left:auto}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #dcdce0;background:#fff;color:#111}
-    .btn.ghost{background:transparent;color:#fff;border-color:var(--line)}
-
-    .more-wrap{display:flex;justify-content:center;padding-top:4px}
-
-    /* Contents */
-    .contents-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .content-card{position:relative;aspect-ratio:1/1;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
-    .content-card img{width:100%;height:100%;object-fit:cover}
-    .content-title{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.0);color:#fff;font-weight:700;opacity:0;transition:opacity .2s, background .2s;text-align:center;padding:12px}
-    .content-card:hover .content-title{opacity:1;background:rgba(0,0,0,.45)}
-
-    /* 詳細ページ */
-    .detail{display:grid;gap:16px}
-    .asset-grid{display:grid;gap:12px}
-    @media (min-width:700px){.asset-grid{grid-template-columns:repeat(3,1fr)}}
-    .asset{background:#111114;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-    .asset a{display:block}
-    .asset .cap{padding:8px 10px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
-
-    /* フッター */
-    footer{padding:40px 16px;color:var(--muted);border-top:1px solid var(--line)}
-    footer .inner{max-width:var(--maxw);margin-left:auto;margin-right:0}
-  </style>
+    /* Main right-aligned (mobile) */
+    .main{width:100%;margin-left:auto}
+    @media (max-width:999px){
+      .mai
 </head>
 <body>
   <!-- スマホ用トップバー -->
